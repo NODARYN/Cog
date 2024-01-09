@@ -209,14 +209,9 @@ void FCogEngineWindow_Plots::RenderPlots(const TArray<FCogDebugPlotEntry*>& Visi
                         Config->TimeRange = TimeRange;
                     }
 
-                    const ImVec2 PlotMin = ImPlot::GetPlotPos();
-                    const ImVec2 PlotSize = ImPlot::GetPlotSize();
-                    const ImVec2 PlotMax = PlotMin + PlotSize;
-
                     //----------------------------------------------------------------
                     // Draw a vertical lines representing the current time and the mouse time
                     //----------------------------------------------------------------
-                    RenderTimeMarker();
 
                     for (FCogDebugPlotEntry* PlotPtr : VisiblePlots)
                     {
@@ -241,6 +236,26 @@ void FCogEngineWindow_Plots::RenderPlots(const TArray<FCogDebugPlotEntry*>& Visi
                             {
                                 ImPlot::SetupAxisLimits(ImAxis_X1, Entry.Time - Config->TimeRange, Entry.Time, ImGuiCond_Always);
                             }
+                        }
+                    }
+
+
+                    for (FCogDebugPlotEntry* PlotPtr : VisiblePlots)
+                    {
+                        if (PlotPtr == nullptr)
+                        {
+                            continue;
+                        }
+
+                        FCogDebugPlotEntry& Entry = *PlotPtr;
+
+                        if (Entry.CurrentRow == PlotIndex)
+                        {
+                            const ImVec2 PlotMin = ImPlot::GetPlotPos();
+                            const ImVec2 PlotSize = ImPlot::GetPlotSize();
+                            const ImVec2 PlotMax = PlotMin + PlotSize;
+
+                            RenderTimeMarker();
 
                             ImPlot::SetAxis(Entry.CurrentYAxis);
 
